@@ -9,6 +9,7 @@ class Triangle
   end
 
   def kind
+    valid?
     if (@side1 <= 0) || (@side2 <= 0) || (@side3 <= 0)
       raise TriangleError
     elsif (@side1 + @side2 <= @side3) || (@side1 + @side3 <= @side2) || (@side2 + @side3 <= @side1)
@@ -22,6 +23,10 @@ class Triangle
         :scalene
       end
     end
+  end
+
+  def valid?
+    valid_tri = [(side1 + side2 > side3), (side1 + side3 > side2), (side2 + side3 > side1)]
   end
 
 end
