@@ -1,38 +1,38 @@
 class Triangle
-
-  attr_reader :side1, :side2, :side3
-
-  def initialize(side1, side2, side3)
-    @side1 = side1
-    @side2 = side2
-    @side3 = side3
+  def initialize(side_1, side_2, side_3)
+    @triangle_sides = []
+    @triangle_sides << side_1
+    @triangle_sides << side_2
+    @triangle_sides << side_3
   end
 
   def valid?
-    valid_tri = [(side1 + side2 > side3), (side1 + side3 > side2), (side2 + side3 > side1)]
-    [side1, side2, side3].each { |s| valid_tri << false if s <= 0 }
-    raise TriangleError if valid_tri.include?(false)
+    sum_one_two = @triangle_sides[0] + @triangle_sides[1]
+    sum_one_three = @triangle_sides[0] + @triangle_sides[2]
+    sum_two_three = @triangle_sides[1] + @triangle_sides[2]
+
+    if (@triangle_sides.none? {|side| side <= 0}) &&
+      (sum_one_two > @triangle_sides[2] && sum_one_three > @triangle_sides[1] && sum_two_three > @triangle_sides[0])
+      return true
+    else
+      return false
+    end
   end
 
   def kind
     if valid?
-      if (@side1 <= 0) || (@side2 <= 0) || (@side3 <= 0)
-        raise TriangleError
-      elsif (@side1 + @side2 <= @side3) || (@side1 + @side3 <= @side2) || (@side2 + @side3 <= @side1)
-        raise TriangleError
+      if @triangle_sides.uniq.length == 1
+        return :equilateral
+      elsif @triangle_sides.uniq.length == 2
+        return :isosceles
       else
-        if (@side1 == @side2) && (@side2 == @side3)
-          :equilateral
-        elsif (@side1 == @side2) || (@side2 == @side3) || (@side1 == @side3)
-          :isosceles
-        elsif (@side1 != @side2) && (@side2 != @side3) && (@side1 != @side3)
-          :scalene
-        end
+        return :scalene
       end
+    else
+      raise TriangleError
     end
   end
 end
-
 
 class TriangleError < StandardError
 
